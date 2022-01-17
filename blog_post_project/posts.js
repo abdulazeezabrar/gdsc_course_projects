@@ -1,53 +1,20 @@
-class Posts {
-    #posts = []
-    #id_counter = 1;
+const mongoose = require('mongoose')
 
-    add({
-        title,
-        description
-    }){
-        var post = {
-            id: this.#id_counter,
-            title: title,
-            description: description,
-        }
-        this.#id_counter++;
-        this.#posts.push(post)
-        return post;
+var Post = mongoose.model('Post', new mongoose.Schema({
+    title: {
+        type: String,
+        max: 20,
+        min: 6,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    views: {
+        type: Number,
+        default: 0,
     }
-    // list
-    list(){
-        return this.#posts;
-    }
-    // get
-    get(id) {
-        return this.#posts.find((post) => post.id == id)
-    }
-    // update
-    update({
-        id,
-        title,
-        description
-    }){
-        var post = this.get(id)
-        if(!post){
-            return undefined
-        } else {
-            post.title = title || post.title;
-            post.description = description || post.description;
-            return post
-        }
-    }
-    // delete
-    delete(id){
-        var post = this.get(id)
-        if(!post){
-            return undefined
-        } else {
-            this.#posts = this.#posts.filter(post => post.id != id)
-        }
-    }
+}))
 
-}
-
-module.exports = new Posts();
+module.exports = Post;
